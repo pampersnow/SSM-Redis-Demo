@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="com.ssm.pojo.User">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="userName" property="userName" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="VARCHAR" />
+        <result column="age" property="age" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,userName,sex,age
+    </sql>
+    
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    	select
+    	<include refid="Base_Column_List" />
+    	from tb_user
+    	where id = #{userId}
+    </select>
+    
+    <select id="findUsers" resultMap="BaseResultMap" parameterType="String">
+        select
+        <include refid="Base_Column_List" />
+        from tb_user
+        where id like #{keyWords}
+        or userName like '%' #{keyWords} '%'
+        or sex like '%' #{keyWords} '%'
+        or age like #{keyWords}
+    </select>
+
+    <!-- 查询所有的user -->
+    <select id="selectAllUser" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tb_user
+    </select>
+
+    <!-- 添加一个用户 -->
+    <insert id="insertUser" parameterType="com.ssm.pojo.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        tb_user(userName,sex,age) VALUES
+        (#{userName},#{sex},#{age})
+    </insert>
+
+    <!-- 删除用户 -->
+    <delete id="deleteUser" parameterType="int">
+        DELETE FROM tb_user WHERE
+        id=#{id}
+    </delete>
+
+    <!-- 更新user信息 -->
+    <update id="editUser" parameterType="com.ssm.pojo.User">
+        UPDATE tb_user
+        <set>
+        	<if test="userName != null">
+        		userName=#{userName},
+        	</if>
+        	<if test="sex != null">
+        		sex=#{sex},
+        	</if>
+        	<if test="age != null">
+        		age=#{age}
+        	</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+    
+    <select id="selectUsersCount" resultType="Integer">
+    	select count(*) from tb_user
+    </select>
+    
+    <select id="selectIds" resultType="Integer">
+    	select id from tb_user
+    </select>
+</mapper>

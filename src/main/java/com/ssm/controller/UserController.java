@@ -59,6 +59,7 @@ public class UserController {
     		usersCount = Integer.toString(userService.selectUsersCount());
     		redisTemplate.opsForValue().set("users_count", usersCount, 1, TimeUnit.HOURS);
     	} else {
+    		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     		System.out.println("从redis缓存中取当前已注册用户数量");
     		System.out.println("拿到的数据："+usersCount);
     	}
